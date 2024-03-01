@@ -1,5 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:convert';
+import 'package:bitebybyte_mobile/functions/login.dart';
+import "package:http/http.dart" as http;
 import 'dart:io';
 
 import 'package:bitebybyte_mobile/pages/DashPage.dart';
@@ -17,15 +20,35 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   TextEditingController userController = TextEditingController();
+  TextEditingController passController = TextEditingController();
+  String login = "";
+  String password = "";
   String firstName = "";
   String lastName = "";
+  String id = "";
   void setUser() {
-    firstName = userController.text;
-    Navigator.push(
+    login = userController.text;
+    password = passController.text;
+    sendPostRequest(login, password).then((value) {
+      setState(() {
+        firstName = value['firstName'];
+        lastName = value['lastName'];
+        id = value['id'];
+      });
+      print(
+          "$id===================================================================");
+
+      // Now that the state is set with the fetched data, navigate to the DashPage.
+      Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) =>
-                DashPage(firstName: firstName, lastName: lastName)));
+                DashPage(firstName: firstName, lastName: lastName)),
+      );
+    }).catchError((error) {
+      // If there's an error, handle it here
+      print(error);
+    });
   }
 
   void goRegister() {
@@ -68,6 +91,7 @@ class _LoginPageState extends State<LoginPage> {
                     height: 10,
                   ),
                   TextFormField(
+                    controller: passController,
                     obscureText: true,
                     decoration: InputDecoration(
                         contentPadding:
