@@ -26,23 +26,25 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController emailController = new TextEditingController();
   TextEditingController passwordController = new TextEditingController();
   TextEditingController confirmPasswordController = new TextEditingController();
+  String email = "";
 
   void registerUser() async {
     String firstName = firstNameController.text;
     String lastName = lastNameController.text;
     String username = usernameController.text;
-    String email = emailController.text;
+    email = emailController.text;
     String password = passwordController.text;
     String confirmPass = confirmPasswordController.text;
 
     String id = "";
-    
+
     // Field Validation Checks
     userVal(username);
+    print('Email: $email');
     emailVal(email);
     passwordVal(password);
     passwordConfirm(password, confirmPass);
-    
+
     sendRegistration(firstName, lastName, username, email, password)
         .then((value) {
       // what do i write here?
@@ -53,16 +55,16 @@ class _RegisterPageState extends State<RegisterPage> {
       });
 
       Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => 
-            DashPage(firstName: firstName, lastName: lastName),)
-      );
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                DashPage(firstName: firstName, lastName: lastName),
+          ));
     }).catchError((error) {
       print(error);
     });
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -105,6 +107,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     height: 10,
                   ),
                   TextFormField(
+                    controller: usernameController,
                     decoration: InputDecoration(
                         fillColor: Colors.white,
                         filled: true,
@@ -115,6 +118,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     height: 10,
                   ),
                   TextFormField(
+                    controller: emailController,
                     decoration: InputDecoration(
                         fillColor: Colors.white,
                         filled: true,
@@ -125,6 +129,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     height: 10,
                   ),
                   TextFormField(
+                    controller: passwordController,
                     obscureText: true,
                     decoration: InputDecoration(
                         fillColor: Colors.white,
@@ -136,6 +141,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     height: 10,
                   ),
                   TextFormField(
+                    controller: confirmPasswordController,
                     obscureText: true,
                     decoration: InputDecoration(
                         fillColor: Colors.white,

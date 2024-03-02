@@ -13,6 +13,7 @@ Future<dynamic> sendPostRequest(String login, String password) async {
       }));
 
   if (response.statusCode == 200) {
+    print("POSTED LOGIN");
     data = jsonDecode(response.body);
     //String user = data;
     //print(user);

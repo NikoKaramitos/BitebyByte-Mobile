@@ -26,28 +26,44 @@ class _LoginPageState extends State<LoginPage> {
   String firstName = "";
   String lastName = "";
   String id = "";
+  String error = "";
   void setUser() {
     login = userController.text;
-    password = passController.text;
-    sendPostRequest(login, password).then((value) {
+    if (login.isEmpty) {
       setState(() {
-        firstName = value['firstName'];
-        lastName = value['lastName'];
-        id = value['id'];
+        error = "Username field is empty";
       });
-      print(
-          "$id===================================================================");
-
-      // Now that the state is set with the fetched data, navigate to the DashPage.
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                DashPage(firstName: firstName, lastName: lastName)),
-      );
-    }).catchError((error) {
+      return;
+    }
+    password = passController.text;
+    if (password.isEmpty) {
+      setState(() {
+        error = "Password field is empty";
+      });
+      return;
+    }
+    sendPostRequest(login, password).then((value) {
+      if (value['error'] != "") {
+        setState(() {
+          this.error = value['error'].toString();
+        });
+      } else {
+        setState(() {
+          firstName = value['firstName'];
+          lastName = value['lastName'];
+          id = value['id'];
+        });
+        // Now that the state is set with the fetched data, navigate to the DashPage.
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  DashPage(firstName: firstName, lastName: lastName)),
+        );
+      }
+    }).catchError((e) {
       // If there's an error, handle it here
-      print(error);
+      print(e);
     });
   }
 
@@ -118,7 +134,11 @@ class _LoginPageState extends State<LoginPage> {
                         statesController: MaterialStatesController(),
                       ),
                     ],
-                  )
+                  ),
+                  Text(
+                    error,
+                    style: TextStyle(color: Colors.red),
+                  ),
                 ],
               )),
         ),
