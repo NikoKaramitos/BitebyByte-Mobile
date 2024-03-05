@@ -7,10 +7,6 @@ import 'package:bitebybyte_mobile/pages/DashPage.dart';
 import 'package:bitebybyte_mobile/pages/LoginPage.dart';
 import 'package:bitebybyte_mobile/theme/colors.dart';
 import 'package:flutter/material.dart';
-import "package:http/http.dart" as http;
-import 'package:flutter/services.dart';
-import 'dart:io';
-import 'dart:convert';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -20,13 +16,16 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  TextEditingController firstNameController = new TextEditingController();
-  TextEditingController lastNameController = new TextEditingController();
-  TextEditingController usernameController = new TextEditingController();
-  TextEditingController emailController = new TextEditingController();
-  TextEditingController passwordController = new TextEditingController();
-  TextEditingController confirmPasswordController = new TextEditingController();
+  TextEditingController firstNameController = TextEditingController();
+  TextEditingController lastNameController = TextEditingController();
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
   String email = "";
+  String error = "";
+  bool confirmVis = true;
+  bool passwordVis = true;
 
   void registerUser() async {
     String firstName = firstNameController.text;
@@ -37,17 +36,56 @@ class _RegisterPageState extends State<RegisterPage> {
     String confirmPass = confirmPasswordController.text;
 
     String id = "";
+    error = "";
 
     // Field Validation Checks
-    userVal(username);
-    print('Email: $email');
-    emailVal(email);
-    passwordVal(password);
-    passwordConfirm(password, confirmPass);
+    if (firstName.isEmpty) {
+      setState(() {
+        error = "First name field is empty";
+      });
+      return;
+    }
+    if (lastName.isEmpty) {
+      setState(() {
+        error = "Last name field is empty";
+      });
+      return;
+    }
+    if (!userVal(username)) {
+      setState(() {
+        error = "Invalid username";
+      });
+      return;
+    }
+    if (!emailVal(email)) {
+      setState(() {
+        error = "Invalid email: \nUse a format like example@mail.com";
+      });
+      return;
+    }
+    if (!passwordVal(password)) {
+      setState(() {
+        error =
+            "Password must contain: \n8 characters \n1 number \n1 special character \n1 capital letter";
+      });
+      return;
+    }
+    if (!passwordConfirm(password, confirmPass)) {
+      setState(() {
+        error = "Password has to match";
+      });
+      return;
+    }
 
     sendRegistration(firstName, lastName, username, email, password)
         .then((value) {
       // what do i write here?
+      if (value['error'] != "") {
+        setState(() {
+          error = value['error'];
+        });
+        return;
+      }
       setState(() {
         firstName = value['firstName'];
         lastName = value['lastName'];
@@ -57,11 +95,14 @@ class _RegisterPageState extends State<RegisterPage> {
       Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) =>
-                DashPage(firstName: firstName, lastName: lastName),
+            builder: (context) => DashPage(
+              firstName: firstName,
+              lastName: lastName,
+              id: id,
+            ),
           ));
     }).catchError((error) {
-      print(error);
+      this.error = error;
     });
   }
 
@@ -77,95 +118,121 @@ class _RegisterPageState extends State<RegisterPage> {
       body: Center(
         child: Padding(
           padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-          child: Container(
-              height: 500,
+          child: Center(
               child: ListView(
+            children: [
+              Container(
+                height: 150,
+              ),
+              TextFormField(
+                controller: firstNameController,
+                decoration: InputDecoration(
+                    fillColor: Colors.white,
+                    filled: true,
+                    border: OutlineInputBorder(),
+                    labelText: 'First Name'),
+              ),
+              Container(
+                height: 10,
+              ),
+              TextFormField(
+                controller: lastNameController,
+                decoration: InputDecoration(
+                    fillColor: Colors.white,
+                    filled: true,
+                    border: OutlineInputBorder(),
+                    labelText: 'Last Name'),
+              ),
+              Container(
+                height: 10,
+              ),
+              TextFormField(
+                controller: usernameController,
+                decoration: InputDecoration(
+                    fillColor: Colors.white,
+                    filled: true,
+                    border: OutlineInputBorder(),
+                    labelText: 'Username'),
+              ),
+              Container(
+                height: 10,
+              ),
+              TextFormField(
+                controller: emailController,
+                decoration: InputDecoration(
+                    fillColor: Colors.white,
+                    filled: true,
+                    border: OutlineInputBorder(),
+                    labelText: 'Email'),
+              ),
+              Container(
+                height: 10,
+              ),
+              TextFormField(
+                controller: passwordController,
+                obscureText: passwordVis,
+                decoration: InputDecoration(
+                  fillColor: Colors.white,
+                  filled: true,
+                  border: OutlineInputBorder(),
+                  labelText: 'Password',
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                        passwordVis ? Icons.visibility : Icons.visibility_off),
+                    onPressed: () {
+                      setState(() {
+                        passwordVis = !passwordVis;
+                      });
+                    },
+                  ),
+                ),
+              ),
+              Container(
+                height: 10,
+              ),
+              TextFormField(
+                controller: confirmPasswordController,
+                obscureText: confirmVis,
+                decoration: InputDecoration(
+                  fillColor: Colors.white,
+                  filled: true,
+                  border: OutlineInputBorder(),
+                  labelText: 'Confirm Password',
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                        confirmVis ? Icons.visibility : Icons.visibility_off),
+                    onPressed: () {
+                      setState(() {
+                        confirmVis = !confirmVis;
+                      });
+                    },
+                  ),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    height: 10,
+                  TextButton(
+                      onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const LoginPage())),
+                      child: Text("Back")),
+                  TextButton(
+                    onPressed: registerUser,
+                    child: Text("Register"),
                   ),
-                  TextFormField(
-                    controller: firstNameController,
-                    decoration: InputDecoration(
-                        fillColor: Colors.white,
-                        filled: true,
-                        border: OutlineInputBorder(),
-                        labelText: 'First Name'),
-                  ),
-                  Container(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    controller: lastNameController,
-                    decoration: InputDecoration(
-                        fillColor: Colors.white,
-                        filled: true,
-                        border: OutlineInputBorder(),
-                        labelText: 'Last Name'),
-                  ),
-                  Container(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    controller: usernameController,
-                    decoration: InputDecoration(
-                        fillColor: Colors.white,
-                        filled: true,
-                        border: OutlineInputBorder(),
-                        labelText: 'Username'),
-                  ),
-                  Container(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    controller: emailController,
-                    decoration: InputDecoration(
-                        fillColor: Colors.white,
-                        filled: true,
-                        border: OutlineInputBorder(),
-                        labelText: 'Email'),
-                  ),
-                  Container(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    controller: passwordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                        fillColor: Colors.white,
-                        filled: true,
-                        border: OutlineInputBorder(),
-                        labelText: 'Password'),
-                  ),
-                  Container(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    controller: confirmPasswordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                        fillColor: Colors.white,
-                        filled: true,
-                        border: OutlineInputBorder(),
-                        labelText: 'Confirm Password'),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      TextButton(
-                          onPressed: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const LoginPage())),
-                          child: Text("Back")),
-                      TextButton(
-                        onPressed: registerUser,
-                        child: Text("Register"),
-                      ),
-                    ],
-                  )
                 ],
-              )),
+              ),
+              Container(
+                alignment: Alignment.center,
+                child: Text(
+                  error,
+                  style: TextStyle(color: Colors.red),
+                ),
+              )
+            ],
+          )),
         ),
       ),
     );

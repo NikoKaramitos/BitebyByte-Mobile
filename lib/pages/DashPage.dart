@@ -6,7 +6,12 @@ import 'package:bitebybyte_mobile/theme/colors.dart';
 class DashPage extends StatefulWidget {
   final String firstName;
   final String lastName;
-  const DashPage({super.key, required this.firstName, required this.lastName});
+  final String id;
+  const DashPage(
+      {super.key,
+      required this.firstName,
+      required this.lastName,
+      required this.id});
 
   @override
   State<DashPage> createState() => _DashPageState();

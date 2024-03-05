@@ -27,6 +27,7 @@ class _LoginPageState extends State<LoginPage> {
   String lastName = "";
   String id = "";
   String error = "";
+  bool passwordVisible = true;
   void setUser() {
     login = userController.text;
     if (login.isEmpty) {
@@ -58,7 +59,7 @@ class _LoginPageState extends State<LoginPage> {
           context,
           MaterialPageRoute(
               builder: (context) =>
-                  DashPage(firstName: firstName, lastName: lastName)),
+                  DashPage(firstName: firstName, lastName: lastName, id: id)),
         );
       }
     }).catchError((e) {
@@ -108,14 +109,25 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   TextFormField(
                     controller: passController,
-                    obscureText: true,
+                    obscureText: passwordVisible,
                     decoration: InputDecoration(
                         contentPadding:
                             EdgeInsets.only(top: 5, right: 8, left: 8),
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(),
-                        labelText: 'Password'),
+                        labelText: 'Password',
+                        suffixIcon: IconButton(
+                            icon: Icon(passwordVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off),
+                            onPressed: () {
+                              setState(
+                                () {
+                                  passwordVisible = !passwordVisible;
+                                },
+                              );
+                            })),
                   ),
                   TextButton(
                       onPressed: () {},

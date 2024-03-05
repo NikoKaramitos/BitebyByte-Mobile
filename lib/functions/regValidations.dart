@@ -5,7 +5,7 @@
 // password = confirmation password
 
 bool userVal(String username) {
-  return true;
+  return username.length > 1;
 }
 
 bool emailVal(String email) {
@@ -20,7 +20,9 @@ bool passwordVal(String password) {
   // 1 capital
   // 1 number
   // 1 special char
-  return true;
+  RegExp regex =
+      RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
+  return regex.hasMatch(password);
 }
 
 bool passwordConfirm(String password, String confirmPass) {

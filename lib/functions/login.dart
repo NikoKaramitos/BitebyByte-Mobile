@@ -18,7 +18,7 @@ Future<dynamic> sendPostRequest(String login, String password) async {
     //String user = data;
     //print(user);
   } else {
-    print("Failed to create post!");
+    print(response.statusCode);
   }
   return data;
 }
