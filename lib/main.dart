@@ -1,10 +1,5 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:bitebybyte_mobile/pages/HomePage.dart';
-import 'package:bitebybyte_mobile/pages/LoginPage.dart';
 import 'package:bitebybyte_mobile/theme/colors.dart';
 
 void main() {
@@ -19,8 +14,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         theme: ThemeData(
             fontFamily: 'pressStart2P',
-            colorScheme: ColorScheme.fromSeed(seedColor: blue)),
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: blue,
+            )),
         debugShowCheckedModeBanner: false,
-        home: HomePage());
+        home: const HomePage());
   }
 }

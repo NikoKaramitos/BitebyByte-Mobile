@@ -1,15 +1,12 @@
-// ignore_for_file: prefer_const_constructors
-
-import 'dart:convert';
+import 'package:bitebybyte_mobile/components/fullTitle.dart';
 import 'package:bitebybyte_mobile/functions/login.dart';
-import "package:http/http.dart" as http;
-import 'dart:io';
-
 import 'package:bitebybyte_mobile/pages/DashPage.dart';
+import 'package:bitebybyte_mobile/pages/ForgotPage.dart';
 import 'package:bitebybyte_mobile/pages/RegisterPage.dart';
 import 'package:bitebybyte_mobile/theme/colors.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -32,34 +29,27 @@ class _LoginPageState extends State<LoginPage> {
     login = userController.text;
     if (login.isEmpty) {
       setState(() {
-        error = "Username field is empty";
+        error = "* Username field is empty";
       });
       return;
     }
     password = passController.text;
     if (password.isEmpty) {
       setState(() {
-        error = "Password field is empty";
+        error = "* Password field is empty";
       });
       return;
     }
     sendPostRequest(login, password).then((value) {
       if (value['error'] != "") {
         setState(() {
-          this.error = value['error'].toString();
+          error = '* ${value['error'].toString()}';
         });
       } else {
-        setState(() {
-          firstName = value['firstName'];
-          lastName = value['lastName'];
-          id = value['id'];
-        });
         // Now that the state is set with the fetched data, navigate to the DashPage.
         Navigator.push(
           context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  DashPage(firstName: firstName, lastName: lastName, id: id)),
+          MaterialPageRoute(builder: (context) => DashPage(user: value)),
         );
       }
     }).catchError((e) {
@@ -70,33 +60,40 @@ class _LoginPageState extends State<LoginPage> {
 
   void goRegister() {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => RegisterPage()));
+        context, MaterialPageRoute(builder: (context) => const RegisterPage()));
   }
 
   @override
   Widget build(BuildContext context) {
+    double fs = 48;
     return Scaffold(
       backgroundColor: creamsicle[300],
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Text("Login"),
-        backgroundColor: creamsicle,
-      ),
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-          child: Container(
-              height: 500,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+          padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 40),
+          child: ListView(
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
+                  Container(
+                    height: 50,
+                  ),
+                  fullTitle(fs: fs),
                   //Text(greeting, style: TextStyle(fontSize: 30)),
                   Container(
-                    height: 10,
+                    height: 30,
+                  ),
+                  Text(
+                    error,
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                  Container(
+                    height: 20,
                   ),
                   TextFormField(
                     controller: userController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                         contentPadding:
                             EdgeInsets.only(top: 5, right: 8, left: 8),
                         fillColor: Colors.white,
@@ -112,10 +109,10 @@ class _LoginPageState extends State<LoginPage> {
                     obscureText: passwordVisible,
                     decoration: InputDecoration(
                         contentPadding:
-                            EdgeInsets.only(top: 5, right: 8, left: 8),
+                            const EdgeInsets.only(top: 5, right: 8, left: 8),
                         filled: true,
                         fillColor: Colors.white,
-                        border: OutlineInputBorder(),
+                        border: const OutlineInputBorder(),
                         labelText: 'Password',
                         suffixIcon: IconButton(
                             icon: Icon(passwordVisible
@@ -130,29 +127,52 @@ class _LoginPageState extends State<LoginPage> {
                             })),
                   ),
                   TextButton(
-                      onPressed: () {},
-                      child: Text(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ForgotPage(),
+                            ));
+                      },
+                      child: const Text(
                         "Forgot Password",
-                        style: TextStyle(fontSize: 10),
+                        style: TextStyle(
+                          fontSize: 12,
+                        ),
                       )),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      TextButton(
-                          onPressed: goRegister, child: Text("Register")),
-                      TextButton(
-                        onPressed: setUser,
-                        child: Text("Login"),
-                        statesController: MaterialStatesController(),
-                      ),
-                    ],
+
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: orange,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.all(20),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
+                      elevation: 12,
+                    ),
+                    onPressed: setUser,
+                    statesController: MaterialStatesController(),
+                    child: const Text(
+                      "Login",
+                      style: TextStyle(fontSize: 20),
+                    ),
                   ),
-                  Text(
-                    error,
-                    style: TextStyle(color: Colors.red),
+                  Container(
+                    height: 150,
+                  ),
+                  TextButton(
+                    onPressed: goRegister,
+                    child: const Text(
+                      "New? Sign Up!",
+                      style: TextStyle(
+                        fontSize: 12, //decoration: TextDecoration.underline,
+                      ),
+                    ),
                   ),
                 ],
-              )),
+              )
+            ],
+          ),
         ),
       ),
     );

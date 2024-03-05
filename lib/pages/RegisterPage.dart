@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:bitebybyte_mobile/functions/login.dart';
+import 'package:bitebybyte_mobile/components/logo.dart';
 import 'package:bitebybyte_mobile/functions/regValidations.dart';
 import 'package:bitebybyte_mobile/functions/register.dart';
 import 'package:bitebybyte_mobile/pages/DashPage.dart';
@@ -86,20 +86,11 @@ class _RegisterPageState extends State<RegisterPage> {
         });
         return;
       }
-      setState(() {
-        firstName = value['firstName'];
-        lastName = value['lastName'];
-        id = value['id'];
-      });
 
       Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => DashPage(
-              firstName: firstName,
-              lastName: lastName,
-              id: id,
-            ),
+            builder: (context) => DashPage(user: value),
           ));
     }).catchError((error) {
       this.error = error;
@@ -111,9 +102,7 @@ class _RegisterPageState extends State<RegisterPage> {
     return Scaffold(
       backgroundColor: creamsicle[300],
       appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: creamsicle,
-        title: Text("Register"),
+        backgroundColor: creamsicle[300],
       ),
       body: Center(
         child: Padding(
@@ -121,9 +110,7 @@ class _RegisterPageState extends State<RegisterPage> {
           child: Center(
               child: ListView(
             children: [
-              Container(
-                height: 150,
-              ),
+              MyLogo(height: 180),
               TextFormField(
                 controller: firstNameController,
                 decoration: InputDecoration(
@@ -209,18 +196,26 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
               ),
+              Container(
+                height: 10,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  TextButton(
-                      onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const LoginPage())),
-                      child: Text("Back")),
-                  TextButton(
+                  ElevatedButton(
                     onPressed: registerUser,
-                    child: Text("Register"),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: orange,
+                      foregroundColor: Colors.white,
+                      padding: EdgeInsets.all(20),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
+                      elevation: 12,
+                    ),
+                    child: Text(
+                      "Sign Up",
+                      style: TextStyle(fontSize: 20),
+                    ),
                   ),
                 ],
               ),
@@ -238,3 +233,6 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 }
+
+
+/// HI CARLOS  BE BACK ON SOON Teehee

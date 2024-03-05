@@ -1,17 +1,11 @@
+import 'package:bitebybyte_mobile/pages/ProfilePage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:bitebybyte_mobile/pages/LoginPage.dart';
 import 'package:bitebybyte_mobile/theme/colors.dart';
 
 class DashPage extends StatefulWidget {
-  final String firstName;
-  final String lastName;
-  final String id;
-  const DashPage(
-      {super.key,
-      required this.firstName,
-      required this.lastName,
-      required this.id});
+  final user;
+  const DashPage({super.key, required this.user});
 
   @override
   State<DashPage> createState() => _DashPageState();
@@ -29,21 +23,36 @@ class _DashPageState extends State<DashPage> {
       backgroundColor: creamsicle[300],
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text("Dashboard"),
+        title: const Text("Dashboard"),
         backgroundColor: creamsicle,
         actions: [
+          IconButton(
+            icon: const Icon(Icons.person),
+            tooltip: 'Profile icon',
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ProfilePage(user: widget.user)));
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.logout),
             tooltip: 'Logout Icon',
             onPressed: logout,
-          )
+          ),
         ],
       ),
-      body: Center(
+      body: const Center(
         child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: [Text('hello ${widget.firstName} ${widget.lastName}')]),
+            children: [
+              Padding(
+                padding: EdgeInsets.all(20.0),
+                child: Text('Some level selection will go here'),
+              )
+            ]),
       ),
     );
   }

@@ -5,7 +5,9 @@ import 'package:google_fonts/google_fonts.dart';
 class MyTitle extends StatelessWidget {
   final String text;
   final Color color;
-  MyTitle({super.key, required this.text, required this.color});
+  final double size;
+  MyTitle(
+      {super.key, required this.text, required this.color, required this.size});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +15,7 @@ class MyTitle extends StatelessWidget {
       text,
       style: GoogleFonts.pressStart2p(
           textStyle: TextStyle(
-        fontSize: 70,
+        fontSize: size,
         color: color,
         shadows: [
           Shadow(
