@@ -2,9 +2,9 @@ import 'package:bitebybyte_mobile/components/title.dart';
 import 'package:bitebybyte_mobile/theme/colors.dart';
 import 'package:flutter/material.dart';
 
-class fullTitle extends StatelessWidget {
+class FullTitle extends StatelessWidget {
   double fs;
-  fullTitle({super.key, required this.fs});
+  FullTitle({super.key, required this.fs});
 
   @override
   Widget build(BuildContext context) {

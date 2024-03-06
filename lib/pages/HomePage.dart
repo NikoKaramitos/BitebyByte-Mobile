@@ -27,19 +27,15 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: creamsicle[300],
       body: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            // Title
-            fullTitle(fs: 70),
-            // Picture
-            const Padding(
-                padding: EdgeInsets.only(left: 60.0, right: 0),
-                child: MyLogo(height: 450)),
-          ]),
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          FullTitle(fs: 70),
+          const Padding(
+              padding: EdgeInsets.only(left: 60.0, right: 0),
+              child: MyLogo(height: 450)),
+        ],
+      ),
     );
   }
 }
-
-// can u go to login and do the hover imports
-// what did you say carlos? si senor

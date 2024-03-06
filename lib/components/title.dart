@@ -17,7 +17,7 @@ class MyTitle extends StatelessWidget {
           textStyle: TextStyle(
         fontSize: size,
         color: color,
-        shadows: [
+        shadows: const [
           Shadow(
             color: Colors.black26, // Choose the color of the shadow
             blurRadius: 2.0, // Adjust the blur radius for the shadow effect

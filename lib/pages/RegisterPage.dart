@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:bitebybyte_mobile/components/logo.dart';
+import 'package:bitebybyte_mobile/functions/displayError.dart';
 import 'package:bitebybyte_mobile/functions/regValidations.dart';
 import 'package:bitebybyte_mobile/functions/register.dart';
 import 'package:bitebybyte_mobile/pages/DashPage.dart';
@@ -43,37 +44,30 @@ class _RegisterPageState extends State<RegisterPage> {
       setState(() {
         error = "First name field is empty";
       });
-      return;
-    }
-    if (lastName.isEmpty) {
+    } else if (lastName.isEmpty) {
       setState(() {
         error = "Last name field is empty";
       });
-      return;
-    }
-    if (!userVal(username)) {
+    } else if (!userVal(username)) {
       setState(() {
         error = "Invalid username";
       });
-      return;
-    }
-    if (!emailVal(email)) {
+    } else if (!emailVal(email)) {
       setState(() {
         error = "Invalid email: \nUse a format like example@mail.com";
       });
-      return;
-    }
-    if (!passwordVal(password)) {
+    } else if (!passwordVal(password)) {
       setState(() {
         error =
             "Password must contain: \n8 characters \n1 number \n1 special character \n1 capital letter";
       });
-      return;
-    }
-    if (!passwordConfirm(password, confirmPass)) {
+    } else if (!passwordConfirm(password, confirmPass)) {
       setState(() {
         error = "Password has to match";
       });
+    }
+    if (error != "") {
+      displayError(error, context);
       return;
     }
 
@@ -81,9 +75,12 @@ class _RegisterPageState extends State<RegisterPage> {
         .then((value) {
       // what do i write here?
       if (value['error'] != "") {
-        setState(() {
-          error = value['error'];
-        });
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            content: Text(error),
+          ),
+        );
         return;
       }
 
@@ -221,11 +218,7 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               Container(
                 alignment: Alignment.center,
-                child: Text(
-                  error,
-                  style: TextStyle(color: Colors.red),
-                ),
-              )
+              ),
             ],
           )),
         ),
