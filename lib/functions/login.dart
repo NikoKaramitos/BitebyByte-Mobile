@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-Future<dynamic> sendPostRequest(String login, String password) async {
+Future<dynamic> sendLoginRequest(String login, String password) async {
   var data;
   final apiUrl =
       Uri.parse('http://bitebybyte-9e423411050b.herokuapp.com/api/login');
@@ -38,8 +38,6 @@ void goForgot(context) {
 
 void setUser(
     {required String login, required String password, required context}) {
-  //login = userController.text;
-  //password = passController.text;
   String error = "";
   if (login.isEmpty) {
     error = "Username field is empty";
@@ -50,7 +48,7 @@ void setUser(
     displayError(error, context);
     return;
   }
-  sendPostRequest(login, password).then((value) {
+  sendLoginRequest(login, password).then((value) {
     if (value['error'] != "") {
       error = value['error'].toString();
       displayError(error, context);

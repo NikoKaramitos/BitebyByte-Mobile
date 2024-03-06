@@ -18,7 +18,10 @@ class FullTitle extends StatelessWidget {
           padding: const EdgeInsets.only(right: 80.0),
           child: MyTitle(text: "By", color: Colors.black, size: fs),
         ),
-        MyTitle(text: "Byte", color: Color.fromARGB(255, 93, 37, 17), size: fs),
+        MyTitle(
+            text: "Byte",
+            color: const Color.fromARGB(255, 93, 37, 17),
+            size: fs),
       ]),
     );
   }

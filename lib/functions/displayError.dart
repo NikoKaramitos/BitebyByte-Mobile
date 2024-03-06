@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// use to make a dialogue box with the error parameter
 void displayError(String error, context) {
   showDialog(
     context: context,

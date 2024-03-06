@@ -24,7 +24,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ),
       body: const Center(
-        child: Text("hello"),
+        child: Text("This will show logout \nand cookbook?"),
       ),
     );
   }

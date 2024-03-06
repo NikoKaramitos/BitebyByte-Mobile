@@ -11,8 +11,8 @@ class LoginFields extends StatefulWidget {
 }
 
 class _LoginFieldsState extends State<LoginFields> {
-  @override
   bool passwordVisible = true;
+  @override
   Widget build(BuildContext context) {
     var userController = widget.userController;
     var passController = widget.passController;

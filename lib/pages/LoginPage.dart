@@ -35,7 +35,6 @@ class _LoginPageState extends State<LoginPage> {
                     height: 50,
                   ),
                   FullTitle(fs: fs),
-                  //Text(greeting, style: TextStyle(fontSize: 30)),
                   Container(
                     height: 20,
                   ),
