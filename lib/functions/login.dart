@@ -17,7 +17,7 @@ Future<dynamic> sendLoginRequest(String login, String password) async {
         "password": password,
       }));
 
-  if (response.statusCode == 200) {
+  if (response.statusCode == 200 || response.statusCode == 409) {
     print("POSTED LOGIN");
     data = jsonDecode(response.body);
   } else {
