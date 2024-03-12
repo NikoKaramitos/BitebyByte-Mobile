@@ -1,4 +1,10 @@
+// ignore_for_file: unnecessary_new
+
+import 'dart:math';
+
+import 'package:bitebybyte_mobile/functions/email.dart';
 import 'package:bitebybyte_mobile/functions/regValidations.dart';
+import 'package:bitebybyte_mobile/pages/ResetPage.dart';
 import 'package:bitebybyte_mobile/theme/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -10,26 +16,40 @@ class ForgotPage extends StatefulWidget {
 }
 
 class _ForgotPageState extends State<ForgotPage> {
+  TextEditingController emailController = TextEditingController();
+  int code = Random().nextInt(900000) + 100000;
   String error = "";
   MaterialColor color = Colors.red;
+
+  void goReset() {
+    print(code);
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ResetPage(
+                  code: code,
+                  email: emailController.text,
+                )));
+  }
+
+  void sendEmail(email) {
+    if (!emailVal(email)) {
+      setState(() {
+        color = Colors.red;
+        error = "*Enter a valid email";
+      });
+      return;
+    } else {
+      sendPasswordRequest(email, code);
+      setState(() {
+        color = Colors.green;
+        error = "Sent";
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    void sendEmail(email) {
-      if (!emailVal(email)) {
-        setState(() {
-          color = Colors.red;
-          error = "*Enter a valid email";
-        });
-        return;
-      } else {
-        setState(() {
-          color = Colors.green;
-          error = "Sent";
-        });
-      }
-    }
-
-    TextEditingController emailController = TextEditingController();
     return Scaffold(
       backgroundColor: creamsicle[300],
       appBar: AppBar(
@@ -46,7 +66,7 @@ class _ForgotPageState extends State<ForgotPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text(
-                "Send a password reset link",
+                "Send a password reset code",
                 style: TextStyle(fontSize: 12),
               ),
               Container(
@@ -80,6 +100,10 @@ class _ForgotPageState extends State<ForgotPage> {
                   elevation: 12,
                 ),
                 child: const Text("Send Email"),
+              ),
+              TextButton(
+                onPressed: () => {goReset()},
+                child: const Text("Go to Reset"),
               )
             ],
           ),
