@@ -1,9 +1,3 @@
-// Field Validation here:
-// user check for existing username
-// email validation (something@something.something)
-// password validation (≥ 8 char, 1 num, 1 special char, 1 cap)
-// password = confirmation password
-
 bool userVal(String username) {
   return username.length > 1;
 }

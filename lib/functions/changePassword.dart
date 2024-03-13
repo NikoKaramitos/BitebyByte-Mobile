@@ -1,6 +1,7 @@
 import 'package:bitebybyte_mobile/functions/displayError.dart';
 import 'package:bitebybyte_mobile/functions/regValidations.dart';
-import 'package:bitebybyte_mobile/pages/DashPage.dart';
+import 'package:bitebybyte_mobile/pages/LoginPage.dart';
+import 'package:bitebybyte_mobile/pages/ResetPage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -32,12 +33,69 @@ Future<dynamic> sendResetRequest(
 
   if (response.statusCode == 200) {
     data = jsonDecode(response.body);
-    print("Success: $password, error: $data");
   } else if (response.statusCode == 409) {
-    print("Nothing found");
     data = jsonDecode(response.body);
   } else {
     displayError("Failed to reset", context);
   }
   return data;
+}
+
+Future<dynamic> sendEmailRequest(String emailTo, int code) async {
+  var data;
+
+  final apiUrl =
+      Uri.parse('http://bitebybyte-9e423411050b.herokuapp.com/api/email');
+  var response = await http.post(apiUrl,
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({
+        "emailTo": emailTo,
+        "message": "Enter the digits below to reset your password:\n $code",
+        "subject": "Reset Password",
+      }));
+
+  if (response.statusCode == 200) {
+    data = jsonDecode(response.body);
+    // } else if (response.statusCode == 409) {
+    //   data = jsonDecode(response.body);
+  } else {
+    print("Error sending email");
+  }
+  return data;
+}
+
+void goReset(code, context, email) {
+  print(code);
+  Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => ResetPage(
+                code: code,
+                email: email,
+              )));
+}
+
+void tryReset(
+    {required String email,
+    required String password,
+    required String confirm,
+    required BuildContext context}) {
+  sendResetRequest(
+    email,
+    password,
+    confirm,
+    context,
+  ).then((value) {
+    if (value['error'] != "") {
+      displayError(value['error'], context);
+      return;
+    }
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const LoginPage(),
+        ));
+  }).catchError((error) {
+    displayError(error, context);
+  });
 }

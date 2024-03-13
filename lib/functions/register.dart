@@ -7,7 +7,7 @@ import 'dart:convert';
 
 Future<dynamic> sendRegisterRequest(String firstName, String lastName,
     String username, String email, String password) async {
-  var data;
+  dynamic data;
 
   final apiUrl =
       Uri.parse('http://bitebybyte-9e423411050b.herokuapp.com/api/register');
@@ -67,7 +67,6 @@ void registerUser({
       displayError(error, context);
       return;
     }
-
     Navigator.push(
         context,
         MaterialPageRoute(

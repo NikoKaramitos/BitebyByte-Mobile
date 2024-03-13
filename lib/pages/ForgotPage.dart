@@ -2,15 +2,14 @@
 
 import 'dart:math';
 
-import 'package:bitebybyte_mobile/functions/email.dart';
+import 'package:bitebybyte_mobile/components/primaryButton.dart';
+import 'package:bitebybyte_mobile/functions/changePassword.dart';
 import 'package:bitebybyte_mobile/functions/regValidations.dart';
-import 'package:bitebybyte_mobile/pages/ResetPage.dart';
 import 'package:bitebybyte_mobile/theme/colors.dart';
 import 'package:flutter/material.dart';
 
 class ForgotPage extends StatefulWidget {
   const ForgotPage({super.key});
-
   @override
   State<ForgotPage> createState() => _ForgotPageState();
 }
@@ -21,17 +20,6 @@ class _ForgotPageState extends State<ForgotPage> {
   String error = "";
   MaterialColor color = Colors.red;
 
-  void goReset() {
-    print(code);
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => ResetPage(
-                  code: code,
-                  email: emailController.text,
-                )));
-  }
-
   void sendEmail(email) {
     if (!emailVal(email)) {
       setState(() {
@@ -40,7 +28,7 @@ class _ForgotPageState extends State<ForgotPage> {
       });
       return;
     } else {
-      sendPasswordRequest(email, code);
+      sendEmailRequest(email, code);
       setState(() {
         color = Colors.green;
         error = "Sent";
@@ -87,22 +75,11 @@ class _ForgotPageState extends State<ForgotPage> {
                   style: TextStyle(color: color),
                 ),
               ),
-              ElevatedButton(
-                onPressed: () {
-                  sendEmail(emailController.text);
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: orange,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.all(20),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12)),
-                  elevation: 12,
-                ),
-                child: const Text("Send Email"),
-              ),
+              PrimaryButton(
+                  text: "Send Email",
+                  function: () => sendEmail(emailController.text)),
               TextButton(
-                onPressed: () => {goReset()},
+                onPressed: () => {goReset(code, context, emailController.text)},
                 child: const Text("Go to Reset"),
               )
             ],
