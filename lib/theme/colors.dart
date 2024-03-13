@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-const orange = const Color(0xffFF720B);
-const beige = const Color(0xffECE4B7);
-const mint = const Color(0xff7DCFB6);
-const green = const Color(0xff33CA7F);
+const orange = Color(0xffFF720B);
+const beige = Color(0xffECE4B7);
+const mint = Color(0xff7DCFB6);
+const green = Color(0xff33CA7F);
 
 const MaterialColor blue = MaterialColor(_bluePrimaryValue, <int, Color>{
   50: Color(0xFFE5E9F9),
