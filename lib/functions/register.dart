@@ -1,12 +1,16 @@
+import 'dart:math';
+
 import 'package:bitebybyte_mobile/functions/displayError.dart';
 import 'package:bitebybyte_mobile/functions/regValidations.dart';
+import 'package:bitebybyte_mobile/functions/verifyAccount.dart';
 import 'package:bitebybyte_mobile/pages/DashPage.dart';
+import 'package:bitebybyte_mobile/pages/VerifyPage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 Future<dynamic> sendRegisterRequest(String firstName, String lastName,
-    String username, String email, String password) async {
+    String username, String email, String password, int code) async {
   dynamic data;
 
   final apiUrl =
@@ -19,6 +23,7 @@ Future<dynamic> sendRegisterRequest(String firstName, String lastName,
         "username": username,
         "email": email,
         "password": password,
+        "code": code,
       }));
 
   if (response.statusCode == 200) {
@@ -61,16 +66,19 @@ void registerUser({
     return;
   }
 
-  sendRegisterRequest(firstName, lastName, username, email, password)
+  int code = Random().nextInt(900000) + 100000;
+  sendRegisterRequest(firstName, lastName, username, email, password, code)
       .then((value) {
     if (value['error'] != "") {
-      displayError(error, context);
+      displayError(value['error'].toString(), context);
       return;
     }
+    sendEmailVerifyRequest(email, code);
+
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => DashPage(user: value),
+          builder: (context) => VerifyPage(user: value, code: code),
         ));
   }).catchError((error) {
     displayError(error, context);
