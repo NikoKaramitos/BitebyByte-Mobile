@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:bitebybyte_mobile/theme/colors.dart';
 
 class CuisineCard extends StatelessWidget {
   final String cuisineName;
@@ -18,11 +19,11 @@ class CuisineCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: 150,
-        padding: const EdgeInsets.all(8),
-        margin: const EdgeInsets.symmetric(horizontal: 8),
+        margin: const EdgeInsets.symmetric(vertical: 8),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: Colors.black, width: 0.5),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.5),
@@ -32,14 +33,23 @@ class CuisineCard extends StatelessWidget {
             ),
           ],
         ),
-        child: Column(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(
-              flagImage,
-              width: 80,
-              height: 80,
-              fit: BoxFit.cover,
+            Container(
+              width: 100,
+              height: 100,
+              padding: EdgeInsets.all(2),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(25),
+                image: DecorationImage(
+                  image: AssetImage(flagImage),
+                  fit: BoxFit.contain,
+                ),
+              ),
+            ),
+            Container(
+              width: 90,
             ),
             SizedBox(height: 8),
             Text(
